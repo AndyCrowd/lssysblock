@@ -1,0 +1,24 @@
+##
+## License: GPL
+## Author: Andy Crowd
+##
+
+if [ ! -d "/sys/block"];then 
+echo '"Error !!!!"' the '"/sys/block"' doesn\'t exist
+ else
+DiskNames=($(ls -1 --sort=version /sys/block));
+PathToFiles=($(for Disk in ${DiskNames[@]};
+do find /sys/block/${Disk}/ ;
+done| sort --sort=general-numeric ));
+
+for Content in ${PathToFiles[@]};
+ do 
+  if [ -f $Content ];
+   then 
+    echo $Content == $(cat $Content);
+  fi;
+done |& grep -v ^cat
+
+fi;
+
+## The "|& grep -v ^cat" command makes ignore accured errors during file reading
